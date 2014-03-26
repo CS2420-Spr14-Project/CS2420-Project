@@ -1,6 +1,10 @@
 //Skyler is working on this right now 3/26/14-14.15
 
 
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 /**
  * Created by Skyler on 3/26/14.
  */
@@ -14,9 +18,10 @@ public class SearchEngine {
 
     void fileParser(){
 
-    //this is a different comment
+        Scanner inFile = new Scanner(new FileReader("./DataFiles./Class4./dataIn.txt"));
+        PrintWriter outFile = new PrintWriter(".\\DataFiles.\\Class4.\\dataOut.txt");
 
-        //this is a comment
+        String fName = inFile.next();
 
     }
 
