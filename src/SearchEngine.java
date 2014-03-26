@@ -18,18 +18,22 @@ public class SearchEngine {
     }
 
     void fileParser() throws FileNotFoundException {
+        String fileName, fileNum;
 
         for(int i = 1; i<51; i++){
-            String fileName = "cranfield00", num = null;
-            num = Integer.toString(i);
 
-            fileName = fileName.concat(num);
+            if(i<10)
+                fileName = "C:\\Users\\scowley\\IdeaProjects\\CS2420-Project3\\Project\\documents\\cranfield000";
+            else
+                fileName = "C:\\Users\\scowley\\IdeaProjects\\CS2420-Project3\\Project\\documents\\cranfield00";
+
+            fileNum = Integer.toString(i);
+
+            fileName = fileName.concat(fileNum);
+
             System.out.println(fileName);
 
-
-
-
-            //Scanner inFile = new Scanner(new FileReader("./DataFiles./Class4./dataIn.txt"));
+            Scanner inFile = new Scanner(new FileReader(fileName));
 
             //String fName = inFile.next();
 
