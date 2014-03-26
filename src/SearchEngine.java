@@ -24,8 +24,13 @@ public class SearchEngine {
     void fileParser() throws FileNotFoundException {
         String fileName, fileNum;
 
+        //we definately need to implement a hash table or
+        //at least a linked list and deal with duplicate words
+        //because there are a ton of words in these documents
+
         //scans through each document and stores the words in an array
-        for(int i = 1; i<51; i++){
+        //for(int i = 1; i<51; i++){
+        for(int i = 1; i<8; i++){
 
             //generating file name
             if(i<10)
