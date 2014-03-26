@@ -11,6 +11,10 @@ import java.util.Scanner;
  */
 public class SearchEngine {
 
+    final int SIZE = 1000;
+    String [] words = new String[SIZE];
+    int count;
+
     //constructor
     public SearchEngine() throws FileNotFoundException {
         fileParser();
@@ -20,7 +24,8 @@ public class SearchEngine {
     void fileParser() throws FileNotFoundException {
         String fileName, fileNum;
 
-        for(int i = 1; i<51; i++){
+        //for(int i = 1; i<51; i++){
+        for(int i = 1; i<2; i++){
 
             if(i<10)
                 fileName = "C:\\Users\\scowley\\IdeaProjects\\CS2420-Project3\\Project\\documents\\cranfield000";
@@ -31,13 +36,26 @@ public class SearchEngine {
 
             fileName = fileName.concat(fileNum);
 
-            System.out.println(fileName);
+            //System.out.println(fileName);
 
             Scanner inFile = new Scanner(new FileReader(fileName));
 
-            //String fName = inFile.next();
+            while(inFile.hasNext()){
+                String wordIn = new String(inFile.next());
+                //System.out.println(wordIn);
 
+                if(!wordIn.startsWith("<")){
+                    //System.out.println(wordIn);
+                    words[count] = wordIn;
+                    count++;
+                }
+            }
+        }
 
+        System.out.println("Array:");
+
+        for(int i = 0; i < SIZE; i++){
+            System.out.println(words[i]);
         }
     }
 
