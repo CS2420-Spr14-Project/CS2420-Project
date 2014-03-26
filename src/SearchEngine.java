@@ -1,4 +1,4 @@
-//Skyler is working on this right now 3/26/14-12.11
+//Skyler is working on this right now 3/26/14-14.00
 
 
 /**
@@ -6,19 +6,21 @@
  */
 public class SearchEngine {
 
+    //constructor
+    public SearchEngine(){
+        fileParser();
+
+    }
+
+    void fileParser(){
+
+    }
+
+    //main function
     public static void main(String [] args){
 
-        //this is the first comment
+        SearchEngine search = new SearchEngine();
 
-        for(int i =0; i<12; i++){
-        System.out.println();
-        }
-
-        //this is the second
-
-        for(int i =0; i<12; i++){
-            System.out.println();
-        }
     }
 }
 
