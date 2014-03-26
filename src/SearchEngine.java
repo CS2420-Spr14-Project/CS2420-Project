@@ -24,9 +24,10 @@ public class SearchEngine {
     void fileParser() throws FileNotFoundException {
         String fileName, fileNum;
 
-        //for(int i = 1; i<51; i++){
-        for(int i = 1; i<2; i++){
+        //scans through each document and stores the words in an array
+        for(int i = 1; i<51; i++){
 
+            //generating file name
             if(i<10)
                 fileName = "C:\\Users\\scowley\\IdeaProjects\\CS2420-Project3\\Project\\documents\\cranfield000";
             else
@@ -36,24 +37,21 @@ public class SearchEngine {
 
             fileName = fileName.concat(fileNum);
 
-            //System.out.println(fileName);
-
+            //reading in from the files
             Scanner inFile = new Scanner(new FileReader(fileName));
 
             while(inFile.hasNext()){
-                String wordIn = new String(inFile.next());
-                //System.out.println(wordIn);
+                String wordIn = inFile.next();
 
                 if(!wordIn.startsWith("<")){
-                    //System.out.println(wordIn);
                     words[count] = wordIn;
                     count++;
                 }
             }
         }
 
+        //prints out the array of stored words
         System.out.println("Array:");
-
         for(int i = 0; i < SIZE; i++){
             System.out.println(words[i]);
         }
