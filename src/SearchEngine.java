@@ -20,7 +20,6 @@ public class SearchEngine {
     public static void main(String [] args){
 
         SearchEngine search = new SearchEngine();
-
     }
 }
 
