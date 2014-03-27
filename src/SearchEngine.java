@@ -12,8 +12,10 @@ import java.util.Scanner;
 public class SearchEngine {
 
     final int SIZE = 1000;
+    final int stopWordsSize = 55;
     String [] words = new String[SIZE];
-    int count;
+    String [] stopWords = new String[stopWordsSize];
+
 
     //constructor
     public SearchEngine() throws FileNotFoundException {
@@ -23,6 +25,7 @@ public class SearchEngine {
 
     void fileParser() throws FileNotFoundException {
         String fileName, fileNum;
+        int count=0;
 
         //we definately need to implement a hash table or
         //at least a linked list and deal with duplicate words
@@ -59,6 +62,31 @@ public class SearchEngine {
         System.out.println("Array:");
         for(int i = 0; i < SIZE; i++){
             System.out.println(words[i]);
+        }
+    }
+
+    void stopWord() throws FileNotFoundException {
+
+
+        Scanner inFile = new Scanner(new FileReader("C:\\Users\\scowley\\IdeaProjects\\CS2420-Project3\\Project\\documents\\stopwords.txt"));
+
+        while(inFile.hasNext()){
+            String wordIn = inFile.next();
+
+            int value = 0;
+            for(int i =0; i < wordIn.length(); i++){
+                value += wordIn.charAt(i);
+            }
+
+            boolean inserted = false;
+            while(!inserted){
+                if(stopWords[value] == null){
+                    stopWords[value] = wordIn;
+                    inserted = true;
+                }
+                value++;
+            }
+
         }
     }
 
