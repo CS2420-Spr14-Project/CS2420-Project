@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class SearchEngine {
 
-    final int SIZE = 1000;
+    final int SIZE = 5420;
     final int stopWordsSize = 54;
     String [] words = new String[SIZE];
     StopWordNode [] stopWords = new StopWordNode[stopWordsSize];
@@ -30,9 +30,7 @@ public class SearchEngine {
         //because there are a ton of words in these documents
 
         //scans through each document and stores the words in an array
-        //for(int i = 1; i<51; i++){
-        //for(int i = 1; i<8; i++){
-        for(int i = 1; i<11; i++){
+        for(int i = 1; i<51; i++){
 
 
             //generating file name
@@ -68,18 +66,18 @@ public class SearchEngine {
         }
 
         //prints out the array of stored words
-        System.out.println("Array:");
+        System.out.println("Array of stored words:");
         for(int i = 0; i < SIZE; i++){
             System.out.println(words[i]);
         }
         //prints out the array of stored words
-        System.out.println("Array2:");
+        System.out.println("Array of stop words(withought linked lists):");
         for(int j = 0; j < stopWordsSize; j++){
             System.out.println(stopWords[j].word);
         }
     }
 
-    //creates teh stopWords hash table 
+    //creates the stopWords hash table
     void stopWord() throws FileNotFoundException {
 
         Scanner inFile = new Scanner(new FileReader(".\\Project\\stopwords.txt"));
@@ -95,8 +93,6 @@ public class SearchEngine {
             for(int i =0; i < wordIn.length(); i++){
                 value += wordIn.charAt(i);
             }
-
-            System.out.println(wordIn + " "+(value%stopWordsSize));
 
             StopWordNode inNode = new StopWordNode(wordIn);
 
