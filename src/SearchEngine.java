@@ -34,9 +34,9 @@ public class SearchEngine {
 
             //generating file name
             if(i<10)
-                fileName = "C:\\Users\\Skyler\\IdeaProjects\\CS2420-Project3\\Project\\documents\\cranfield000";
+                fileName = ".\\Project\\documents\\cranfield000";
             else
-                fileName = "C:\\Users\\Skyler\\IdeaProjects\\CS2420-Project3\\Project\\documents\\cranfield00";
+                fileName = ".\\Project\\documents\\cranfield00";
 
             fileNum = Integer.toString(i);
 
@@ -69,7 +69,7 @@ public class SearchEngine {
 
     void stopWord() throws FileNotFoundException {
 
-        Scanner inFile = new Scanner(new FileReader("C:\\Users\\Skyler\\IdeaProjects\\CS2420-Project3\\Project\\stopwords.txt"));
+        Scanner inFile = new Scanner(new FileReader(".\\Project\\stopwords.txt"));
 
         for(int i = 0; i < stopWordsSize; i++)
             stopWords[i] = new StopWordNode();
