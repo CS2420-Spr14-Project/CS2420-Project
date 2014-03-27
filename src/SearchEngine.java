@@ -79,6 +79,7 @@ public class SearchEngine {
         }
     }
 
+    //creates teh stopWords hash table 
     void stopWord() throws FileNotFoundException {
 
         Scanner inFile = new Scanner(new FileReader(".\\Project\\stopwords.txt"));
@@ -108,6 +109,8 @@ public class SearchEngine {
         }
     }
 
+    //recursively checks a given string against the stopWords hash table
+    //if the word is in the stopWords array it returns true
     boolean stopCheck(String inString){
         int value = 0;
         for(int i =0; i < inString.length(); i++){
