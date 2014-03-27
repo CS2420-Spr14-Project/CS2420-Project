@@ -1,3 +1,5 @@
+import javafx.scene.paint.Stop;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -29,7 +31,8 @@ public class SearchEngine {
 
         //scans through each document and stores the words in an array
         //for(int i = 1; i<51; i++){
-        for(int i = 1; i<8; i++){
+        //for(int i = 1; i<8; i++){
+        for(int i = 1; i<11; i++){
 
 
             //generating file name
@@ -48,9 +51,18 @@ public class SearchEngine {
             while(inFile.hasNext()){
                 String wordIn = inFile.next();
 
-                if(!wordIn.startsWith("<")){
-                    words[count] = wordIn;
-                    count++;
+                //skip <> tags and .
+                if(!wordIn.startsWith("<") && !wordIn.startsWith(".")){
+                    //remove commas
+                    if(wordIn.endsWith(","))
+                        wordIn = wordIn.replace(",", "");
+                    //check to see if it is stop word
+                    if(!stopCheck(wordIn)){
+                        //stores the word in an array
+                        //**need to turn into storing into a hash table
+                        words[count] = wordIn;
+                        count++;
+                    }
                 }
             }
         }
@@ -77,14 +89,13 @@ public class SearchEngine {
         while(inFile.hasNext()){
             String wordIn = inFile.next();
 
+            //convert word to ASCII value
             int value = 0;
             for(int i =0; i < wordIn.length(); i++){
                 value += wordIn.charAt(i);
             }
 
             System.out.println(wordIn + " "+(value%stopWordsSize));
-
-
 
             StopWordNode inNode = new StopWordNode(wordIn);
 
@@ -96,6 +107,28 @@ public class SearchEngine {
                 stopWords[value%stopWordsSize].next.insert(inNode);
         }
     }
+
+    boolean stopCheck(String inString){
+        int value = 0;
+        for(int i =0; i < inString.length(); i++){
+            value += inString.charAt(i);
+        }
+
+        return stopCheck(inString, value, stopWords[value%stopWordsSize]);
+    }
+    boolean stopCheck(String inString, int inValue, StopWordNode inNode){
+
+        if(inNode.word == null)
+            return false;
+        else if(inString.compareTo(inNode.word) == 0)
+            return true;
+        else if(inNode.next == null)
+            return false;
+        else
+            return stopCheck(inString, inValue, inNode.next);
+    }
+
+
 
     //main function
     public static void main(String [] args) throws FileNotFoundException {
