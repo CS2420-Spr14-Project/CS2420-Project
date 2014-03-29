@@ -58,8 +58,11 @@ public class SearchEngine {
                     if(!stopCheck(wordIn)){
                         //stores the word in an array
                         //**need to turn into storing into a hash table
+
+                        ////insertinto hash table
                         words[count] = wordIn;
                         count++;
+                        //////////////////////////
                     }
                 }
             }
