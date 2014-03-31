@@ -176,7 +176,7 @@ public class SearchEngine {
         else
             output = search(words[value%SIZE].next, input);
 
-        JOptionPane.showMessageDialog(null, "The word was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(null,input + " was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
     }
     String search(Node inNode, String input){
         if(inNode.word == null)
