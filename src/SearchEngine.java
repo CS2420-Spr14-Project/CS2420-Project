@@ -63,10 +63,8 @@ public class SearchEngine {
                         wordIn = wordIn.replace(",", "");
                     //check to see if it is stop word
                     if(!stopCheck(wordIn)){
-                        //stores the word in an array
-                        //**need to turn into storing into a hash table
 
-                        ////insertinto hash table
+                        //insert into hash table
                         Node toInsert = new Node(wordIn, fileName);
                         System.out.println(wordIn +", "+ fileName);
                         int value = 0;
@@ -89,7 +87,6 @@ public class SearchEngine {
                             words[value%SIZE].next = toInsert;
                         else
                             words[value%SIZE].next.insert(toInsert);
-                        //////////////////////////
                     }
                 }
             }

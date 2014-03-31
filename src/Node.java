@@ -25,9 +25,8 @@ public class Node{
     }
 
     void insert(Node inNode){
-        System.out.println("point1");
+
         if(this.word.compareTo(inNode.word)==0 && inNode.docs != null){
-            System.out.println("point2");
             Node docIn = new Node(inNode.docs.word);
             this.docs.insert(docIn);
         }
