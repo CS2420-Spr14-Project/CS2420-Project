@@ -9,10 +9,12 @@ import java.util.Scanner;
  */
 public class SearchEngine {
 
-    final int SIZE = 5420;
+    //final int SIZE = 5420;
+    final int SIZE = 128;
     final int stopWordsSize = 54;
-    String [] words = new String[SIZE];
-    StopWordNode [] stopWords = new StopWordNode[stopWordsSize];
+    //String [] words = new String[SIZE];
+    Node [] words = new Node[SIZE];
+    Node [] stopWords = new Node[stopWordsSize];
 
     //constructor
     public SearchEngine() throws FileNotFoundException {
@@ -21,30 +23,35 @@ public class SearchEngine {
     }
 
     void fileParser() throws FileNotFoundException {
-        String fileName, fileNum;
+        String fileName, fileNum, filePath;
         int count = 0;
 
         stopWord();
-        //we definately need to implement a hash table or
+        //we definitely need to implement a hash table or
         //at least a linked list and deal with duplicate words
         //because there are a ton of words in these documents
+
+        //creating array to hash words into
+        for(int i = 0; i < SIZE; i++)
+            words[i] = new Node();
 
         //scans through each document and stores the words in an array
         for(int i = 1; i<51; i++){
 
-
             //generating file name
             if(i<10)
-                fileName = ".\\Project\\documents\\cranfield000";
+                fileName = "cranfield000";
             else
-                fileName = ".\\Project\\documents\\cranfield00";
+                fileName = "cranfield00";
 
             fileNum = Integer.toString(i);
+            filePath = ".\\Project\\documents\\";
 
             fileName = fileName.concat(fileNum);
+            filePath = filePath.concat(fileName);
 
             //reading in from the files
-            Scanner inFile = new Scanner(new FileReader(fileName));
+            Scanner inFile = new Scanner(new FileReader(filePath));
 
             while(inFile.hasNext()){
                 String wordIn = inFile.next();
@@ -60,8 +67,28 @@ public class SearchEngine {
                         //**need to turn into storing into a hash table
 
                         ////insertinto hash table
-                        words[count] = wordIn;
-                        count++;
+                        Node toInsert = new Node(wordIn, fileName);
+                        System.out.println(wordIn +", "+ fileName);
+                        int value = 0;
+                        for(int j =0; j < wordIn.length(); j++){
+                            value += wordIn.charAt(j);
+                        }
+
+                        if(words[value%SIZE].word == null){
+                            words[value%SIZE].word = toInsert.word;
+                            words[value%SIZE].docs = toInsert.docs;
+                        }
+                        else if(words[value%SIZE].word.compareTo(toInsert.word)==0){
+                            Node docIn = new Node(toInsert.docs.word);
+                            if(words[value%SIZE].docs == null)
+                                words[value%SIZE].docs = toInsert;
+                            else
+                                words[value%SIZE].docs.insert(docIn);
+                        }
+                        else if(words[value%SIZE].next == null)
+                            words[value%SIZE].next = toInsert;
+                        else
+                            words[value%SIZE].next.insert(toInsert);
                         //////////////////////////
                     }
                 }
@@ -71,7 +98,7 @@ public class SearchEngine {
         //prints out the array of stored words
         System.out.println("Array of stored words:");
         for(int i = 0; i < SIZE; i++){
-            System.out.println(words[i]);
+            System.out.println(i + " "+words[i].word);
         }
         //prints out the array of stored words
         System.out.println("Array of stop words(withought linked lists):");
@@ -86,7 +113,7 @@ public class SearchEngine {
         Scanner inFile = new Scanner(new FileReader(".\\Project\\stopwords.txt"));
 
         for(int i = 0; i < stopWordsSize; i++)
-            stopWords[i] = new StopWordNode();
+            stopWords[i] = new Node();
 
         while(inFile.hasNext()){
             String wordIn = inFile.next();
@@ -97,7 +124,7 @@ public class SearchEngine {
                 value += wordIn.charAt(i);
             }
 
-            StopWordNode inNode = new StopWordNode(wordIn);
+            Node inNode = new Node(wordIn);
 
             if(stopWords[value%stopWordsSize].word == null)
                 stopWords[value%stopWordsSize].word = inNode.word;
@@ -118,7 +145,7 @@ public class SearchEngine {
 
         return stopCheck(inString, value, stopWords[value%stopWordsSize]);
     }
-    boolean stopCheck(String inString, int inValue, StopWordNode inNode){
+    boolean stopCheck(String inString, int inValue, Node inNode){
 
         if(inNode.word == null)
             return false;
