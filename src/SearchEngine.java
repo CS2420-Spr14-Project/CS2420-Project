@@ -10,8 +10,11 @@ import java.util.Scanner;
 public class SearchEngine {
 
     //final int SIZE = 5420;
-    final int SIZE = 128;
-    final int stopWordsSize = 54;
+    //final int SIZE = 128;
+    final int SIZE = 256;
+    //final int SIZE = 512;
+    //final int stopWordsSize = 54;
+    final int stopWordsSize = 28;
     //String [] words = new String[SIZE];
     Node [] words = new Node[SIZE];
     Node [] stopWords = new Node[stopWordsSize];
