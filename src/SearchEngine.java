@@ -1,5 +1,6 @@
 import javafx.scene.paint.Stop;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -22,6 +23,7 @@ public class SearchEngine {
     //constructor
     public SearchEngine() throws FileNotFoundException {
         fileParser();
+        search();
 
     }
 
@@ -30,9 +32,6 @@ public class SearchEngine {
         int count = 0;
 
         stopWord();
-        //we definitely need to implement a hash table or
-        //at least a linked list and deal with duplicate words
-        //because there are a ton of words in these documents
 
         //creating array to hash words into
         for(int i = 0; i < SIZE; i++)
@@ -158,6 +157,39 @@ public class SearchEngine {
     }
 
 
+    void search(){
+
+    String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
+        int value = 0;
+        for(int j =0; j < input.length(); j++){
+            value += input.charAt(j);
+        }
+    String output = null;
+        if(words[value%SIZE].word == null)
+            output = "Word not found.";
+        else if(words[value%SIZE].word.compareTo(input) == 0){
+            output = words[value%SIZE].docs.printDocs();
+        }
+        else if(words[value%SIZE].next == null){
+            output = "Word not found.";
+        }
+        else
+            output = search(words[value%SIZE].next, input);
+
+        JOptionPane.showMessageDialog(null, "The word was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
+    }
+    String search(Node inNode, String input){
+        if(inNode.word == null)
+            return "Word not found.";
+        else if(inNode.word.compareTo(input) == 0){
+            return inNode.docs.printDocs();
+        }
+        else if(inNode.next == null){
+            return "Word not found.";
+        }
+        else
+            return search(inNode.next, input);
+    }
 
     //main function
     public static void main(String [] args) throws FileNotFoundException {
