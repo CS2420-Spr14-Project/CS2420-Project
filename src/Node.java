@@ -34,25 +34,14 @@ public class Node{
 
         }
         else{
-                if(this.next == null){
+            if(this.next == null)
                this.next = inNode;
-            }
-            else {
+            else
                this.next.insert(inNode);
-            }
         }
     }
 
     String printDocs(){
-        if(this.next == null)
-            return this.word;
-        else
-            return this.word.concat("\n"+printDocs(this.next));
-    }
-    String printDocs(Node currResults){
-        if(currResults.next == null)
-            return currResults.word;
-        else
-            return currResults.word.concat("\n"+printDocs(currResults.next));
+        return this.next == null ? this.word: this.word.concat("\n"+this.next.printDocs());
     }
 }

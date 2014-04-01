@@ -41,10 +41,7 @@ public class SearchEngine {
         for(int i = 1; i<51; i++){
 
             //generating file name
-            if(i<10)
-                fileName = "cranfield000";
-            else
-                fileName = "cranfield00";
+            fileName = i<10?"cranfield000":"cranfield00";
 
             fileNum = Integer.toString(i);
             filePath = ".\\Project\\documents\\";
@@ -64,16 +61,15 @@ public class SearchEngine {
                     if(wordIn.endsWith(","))
                         wordIn = wordIn.replace(",", "");
                     //check to see if it is stop word
-                    if(!stopCheck(wordIn)){
+
+
+                    //if(!stopCheck(wordIn)){
+                    if(!stopCheck(wordIn, stopWords[stopHash(wordIn)%stopWordsSize])){
 
                         //insert into hash table
                         Node toInsert = new Node(wordIn, fileName);
                         System.out.println(wordIn +", "+ fileName);
-                        int value = 0;
-                        for(int j =0; j < wordIn.length(); j++){
-                            value += wordIn.charAt(j);
-                        }
-                        //value = wordIn.charAt(0)*wordIn.charAt(wordIn.length()-1);
+                        int value = mainHash(wordIn);
 
                         if(words[value%SIZE].word == null){
                             words[value%SIZE].word = toInsert.word;
@@ -119,11 +115,7 @@ public class SearchEngine {
             String wordIn = inFile.next();
 
             //convert word to ASCII value
-            int value = 0;
-            /*for(int i =0; i < wordIn.length(); i++){
-                value += wordIn.charAt(i);
-            }*/
-            value = wordIn.charAt(0)+wordIn.charAt(wordIn.length()-1);
+            int value = stopHash(wordIn);
 
             Node inNode = new Node(wordIn);
 
@@ -138,16 +130,7 @@ public class SearchEngine {
 
     //recursively checks a given string against the stopWords hash table
     //if the word is in the stopWords array it returns true
-    boolean stopCheck(String inString){
-        int value = 0;
-        /*for(int i =0; i < inString.length(); i++){
-            value += inString.charAt(i);
-        }*/
-        value = inString.charAt(0)+inString.charAt(inString.length()-1);
-
-        return stopCheck(inString, value, stopWords[value%stopWordsSize]);
-    }
-    boolean stopCheck(String inString, int inValue, Node inNode){
+    boolean stopCheck(String inString, Node inNode){
 
         if(inNode.word == null)
             return false;
@@ -156,19 +139,15 @@ public class SearchEngine {
         else if(inNode.next == null)
             return false;
         else
-            return stopCheck(inString, inValue, inNode.next);
+            return stopCheck(inString, inNode.next);
     }
 
 
     void search(){
 
     String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
-        int value = 0;
-        for(int j =0; j < input.length(); j++){
-            value += input.charAt(j);
-        }
-        //value = input.charAt(0)*input.charAt(input.length()-1);
-    String output = null;
+        int value = mainHash(input);
+    String output;
         if(words[value%SIZE].word == null)
             output = "Word not found.";
         else if(words[value%SIZE].word.compareTo(input) == 0){
@@ -193,6 +172,22 @@ public class SearchEngine {
         }
         else
             return search(inNode.next, input);
+    }
+
+    int mainHash(String wordIn){
+        int value = 0;
+        for(int j =0; j < wordIn.length(); j++){
+            value += wordIn.charAt(j);
+        }
+        //value = wordIn.charAt(0)*wordIn.charAt(wordIn.length()-1);
+        return value;
+    }
+    int stopHash(String wordIn){
+        int value = 0;
+            /*for(int i =0; i < wordIn.length(); i++){
+                value += wordIn.charAt(i);
+            }*/
+        return wordIn.charAt(0)+wordIn.charAt(wordIn.length()-1);
     }
 
     //main function
