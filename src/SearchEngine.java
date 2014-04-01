@@ -73,6 +73,7 @@ public class SearchEngine {
                         for(int j =0; j < wordIn.length(); j++){
                             value += wordIn.charAt(j);
                         }
+                        //value = wordIn.charAt(0)*wordIn.charAt(wordIn.length()-1);
 
                         if(words[value%SIZE].word == null){
                             words[value%SIZE].word = toInsert.word;
@@ -119,9 +120,10 @@ public class SearchEngine {
 
             //convert word to ASCII value
             int value = 0;
-            for(int i =0; i < wordIn.length(); i++){
+            /*for(int i =0; i < wordIn.length(); i++){
                 value += wordIn.charAt(i);
-            }
+            }*/
+            value = wordIn.charAt(0)*wordIn.charAt(wordIn.length()-1);
 
             Node inNode = new Node(wordIn);
 
@@ -138,9 +140,10 @@ public class SearchEngine {
     //if the word is in the stopWords array it returns true
     boolean stopCheck(String inString){
         int value = 0;
-        for(int i =0; i < inString.length(); i++){
+        /*for(int i =0; i < inString.length(); i++){
             value += inString.charAt(i);
-        }
+        }*/
+        value = inString.charAt(0)*inString.charAt(inString.length()-1);
 
         return stopCheck(inString, value, stopWords[value%stopWordsSize]);
     }
@@ -164,6 +167,7 @@ public class SearchEngine {
         for(int j =0; j < input.length(); j++){
             value += input.charAt(j);
         }
+        //value = input.charAt(0)*input.charAt(input.length()-1);
     String output = null;
         if(words[value%SIZE].word == null)
             output = "Word not found.";
