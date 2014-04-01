@@ -123,7 +123,7 @@ public class SearchEngine {
             /*for(int i =0; i < wordIn.length(); i++){
                 value += wordIn.charAt(i);
             }*/
-            value = wordIn.charAt(0)*wordIn.charAt(wordIn.length()-1);
+            value = wordIn.charAt(0)+wordIn.charAt(wordIn.length()-1);
 
             Node inNode = new Node(wordIn);
 
@@ -143,7 +143,7 @@ public class SearchEngine {
         /*for(int i =0; i < inString.length(); i++){
             value += inString.charAt(i);
         }*/
-        value = inString.charAt(0)*inString.charAt(inString.length()-1);
+        value = inString.charAt(0)+inString.charAt(inString.length()-1);
 
         return stopCheck(inString, value, stopWords[value%stopWordsSize]);
     }
