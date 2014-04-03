@@ -165,6 +165,34 @@ public class SearchEngine {
             return search(inNode.next, input);
     }
 
+    Node unknown(String inString){
+        //check if it contains and or or
+        //check for only
+        //parse through term1 term2
+        //determine if there are ands and ors
+        //if and
+        //Node results = AndCompare(search(term1), search(term2));
+        //else or
+        //Node results = OrCompare(search(term1), search(term2));
+
+
+
+    }
+
+    //true = and, false = or
+    Node compare(Node inNode1, Node inNode2){
+        //temp node
+
+        //compare each doc in each list
+        //if anding
+        //store matches in temp
+        //if oring
+        //store all in temp discard duplicate docs
+        //return temp
+
+
+    }
+
     int mainHash(String wordIn) {
         int value = 0;
         for (int j = 0; j < wordIn.length(); j++) {
