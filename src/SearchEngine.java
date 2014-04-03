@@ -66,9 +66,13 @@ public class SearchEngine {
                     //if(!stopCheck(wordIn)){
                     if (!stopCheck(wordIn, stopWords[stopHash(wordIn) % stopWordsSize])) {
 
+                        if(wordIn.contains("-")){
+                            //System.out.println(wordIn);
+                        }
+
                         //insert into hash table
                         Node toInsert = new Node(wordIn, fileName);
-                        System.out.println(wordIn + ", " + fileName);
+                        //System.out.println(wordIn + ", " + fileName);
                         int value = mainHash(wordIn);
 
                         if (words[value % SIZE].word == null) {
@@ -145,15 +149,7 @@ public class SearchEngine {
 
         String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
         int value = mainHash(input);
-        String output;
-        if (words[value % SIZE].word == null)
-            output = "Word not found.";
-        else if (words[value % SIZE].word.compareTo(input) == 0) {
-            output = words[value % SIZE].docs.printDocs();
-        } else if (words[value % SIZE].next == null) {
-            output = "Word not found.";
-        } else
-            output = search(words[value % SIZE].next, input);
+        String output = search(words[value % SIZE], input);
 
         JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
     }
