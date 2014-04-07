@@ -66,7 +66,7 @@ public class SearchEngine {
                     //if(!stopCheck(wordIn)){
                     if (!stopCheck(wordIn, stopWords[stopHash(wordIn) % stopWordsSize])) {
 
-                        if(wordIn.contains("-")){
+                        if (wordIn.contains("-")) {
                             //System.out.println(wordIn);
                         }
 
@@ -165,7 +165,7 @@ public class SearchEngine {
             return search(inNode.next, input);
     }
 
-    Node unknown(String inString){
+    //Node unknown(String inString) {
         //check if it contains and or or
         //check for only
         //parse through term1 term2
@@ -176,21 +176,77 @@ public class SearchEngine {
         //Node results = OrCompare(search(term1), search(term2));
 
 
-
-    }
+    //}
 
     //true = and, false = or
-    Node compare(Node inNode1, Node inNode2){
+    //Node compare(Node inNode1, Node inNode2) {
         //temp node
-
         //compare each doc in each list
         //if anding
         //store matches in temp
         //if oring
         //store all in temp discard duplicate docs
         //return temp
+    //}
 
+    Node andCompare(Node inNode1, Node inNode2) {
+        //if equal
+        if (inNode1.word.compareTo(inNode2.word) == 0) {
+            //if at the end of a list
+            if (inNode1.next == null)
+                return inNode1;
+            else if (inNode2.next == null)
+                return inNode2;
+            else {
+                Node result = new Node(inNode1.word);
+                result.next = andCompare(inNode1.next, inNode2.next);
+                return result;
+            }
+        }
+        //if n1 is greater
+        else if (inNode1.word.compareTo(inNode2.word) > 0) {
+            if (inNode2.next == null)
+                return null;
+            return andCompare(inNode1, inNode2.next);
+        }
+        //if n2 is greater
+        else {
+            if (inNode1.next == null)
+                return null;
+            return andCompare(inNode1.next, inNode2);
+        }
+    }
 
+    Node orCompare(Node inNode1, Node inNode2) {
+        //if equal
+        if (inNode1.word.compareTo(inNode2.word) == 0) {
+            //if at the end of a list
+            if (inNode1.next == null)
+                return inNode2;
+            else if (inNode2.next == null)
+                return inNode1;
+            else {
+                Node result = new Node(inNode1.word);
+                result.next = orCompare(inNode1.next, inNode2.next);
+                return result;
+            }
+        }
+        //if n1 is greater
+        else if (inNode1.word.compareTo(inNode2.word) > 0) {
+            if (inNode2.next == null)
+                return inNode1;
+            Node result = new Node(inNode1.word);
+            result.next = orCompare(inNode1, inNode2.next);
+            return result;
+        }
+        //if n2 is greater
+        else {
+            if (inNode1.next == null)
+                return inNode2;
+            Node result = new Node(inNode1.word);
+            result.next = orCompare(inNode1.next, inNode2);
+            return result;
+        }
     }
 
     int mainHash(String wordIn) {

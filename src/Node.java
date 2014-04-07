@@ -24,6 +24,12 @@ public class Node {
         docs = new Node(docIn);
     }
 
+    /*Node(String wordIn, Node nodeIn) {
+        word = wordIn;
+        next = nodeIn;
+        docs = null;
+    }*/
+
     void insert(Node inNode) {
 
         if (this.word.compareTo(inNode.word) == 0 && inNode.docs != null) {
