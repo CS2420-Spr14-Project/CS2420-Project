@@ -144,14 +144,22 @@ public class SearchEngine {
             return stopCheck(inString, inNode.next);
     }
 
-
-    void search() {
+    void getInput(){
 
         String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
+
+        JOptionPane.showMessageDialog(null, unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    String search(String input) {
+
+        //String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
         int value = mainHash(input);
         String output = search(words[value % SIZE], input);
 
         JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
+
+        return output; // placed temporarily
     }
 
     String search(Node inNode, String input) {
@@ -166,7 +174,37 @@ public class SearchEngine {
     }
 
     Node unknown(String inString){
+        boolean andTrue = false, orTrue = false;
+
+        int[] termIndex = new int[4];
+        String[] term = new String[4];
+        int[] andIndex = new int[3];
+        int[] orIndex = new int [3];
+
         //check if it contains and or or
+        if (inString.contains("AND")){
+            andTrue = true;
+
+            int j = 0;
+            for (int i = -1; (i = inString.indexOf("AND", i + 1)) != -1;){
+                int element = nextElement(termIndex);
+                term[element] = inString.substring(j, inString.indexOf("AND") - 2);
+                j = i + 4;
+            }
+        }
+
+        if (inString.contains("OR")){
+            orTrue = true;
+
+            for (int i = -1; (i = inString.indexOf("OR", i + 1)) != -1;){
+
+            }
+        }
+
+        if (andTrue && orTrue){
+
+        }
+
         //check for only
         //parse through term1 term2
         //determine if there are ands and ors
@@ -175,7 +213,44 @@ public class SearchEngine {
         //else or
         //Node results = OrCompare(search(term1), search(term2));
 
+        return results;
 
+    }
+
+    int nextElement(int[] arr){
+        int var = -1;
+
+        for (int i = 0; i < 5; i++){
+
+            if (arr[i] != -1) i++;
+            else var = i;
+        }
+        return var;
+    }
+
+    String findTerm(String inString){
+        String term1, term2;
+
+        //check if it contains and or or
+        if (inString.contains("AND")){
+            term1 = inString.substring(0, inString.indexOf("AND"));
+            term2 = findTerm(inString.substring(inString.indexOf("AND") + 4, inString.length()));
+        }
+
+        if (inString.contains("OR")){
+            term1 = inString.substring(0, inString.indexOf("OR"));
+            term2 = findTerm(inString.substring(inString.indexOf("OR") + 3, inString.length()));
+        }
+
+        //check for only
+        //parse through term1 term2
+        //determine if there are ands and ors
+        //if and
+        //Node results = AndCompare(search(term1), search(term2));
+        //else or
+        //Node results = OrCompare(search(term1), search(term2));
+
+        //return results;
 
     }
 
