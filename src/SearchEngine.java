@@ -159,13 +159,15 @@ public class SearchEngine {
             return "Word not found.";
         else if (inNode.word.compareTo(input) == 0) {
             return inNode.docs.printDocs();
+            //Node temp = andCompare(inNode.docs, inNode.docs);
+            //return temp.docs.printDocs();
         } else if (inNode.next == null) {
             return "Word not found.";
         } else
             return search(inNode.next, input);
     }
 
-    Node unknown(String inString){
+    void unknown(String inString){
         //check if it contains and or or
         //check for only
         //parse through term1 term2
