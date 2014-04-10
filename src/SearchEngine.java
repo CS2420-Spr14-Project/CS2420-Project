@@ -23,7 +23,7 @@ public class SearchEngine {
     //constructor
     public SearchEngine() throws FileNotFoundException {
         fileParser();
-        search();
+        getInput();
 
     }
 
@@ -151,35 +151,38 @@ public class SearchEngine {
         JOptionPane.showMessageDialog(null, unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
     }
 
-    String search(String input) {
+    Node search(String input) {
 
         //String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
+        System.out.println(input);
         int value = mainHash(input);
-        String output = search(words[value % SIZE], input);
+        Node output = search(words[value % SIZE], input);
 
-        JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
+        //JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
 
         return output; // placed temporarily
     }
 
-    String search(Node inNode, String input) {
+    Node search(Node inNode, String input) {
         if (inNode.word == null)
-            return "Word not found.";
+            return null; //"Word not found."
         else if (inNode.word.compareTo(input) == 0) {
-            return inNode.docs.printDocs();
+            return inNode.docs;
         } else if (inNode.next == null) {
-            return "Word not found.";
+            return null; // "Word not found."
         } else
             return search(inNode.next, input);
     }
 
     Node unknown(String inString){
         boolean andTrue = false, orTrue = false;
-
+        Node results = new Node();
         int[] termIndex = new int[4];
         String[] term = new String[4];
-        int[] andIndex = new int[3];
-        int[] orIndex = new int [3];
+        int[] andOrIndex = new int[4];
+
+        termIndex = initialized(termIndex);
+        andOrIndex = initialized(andOrIndex);
 
         //check if it contains and or or
         if (inString.contains("AND")){
@@ -187,8 +190,8 @@ public class SearchEngine {
 
             int j = 0;
             for (int i = -1; (i = inString.indexOf("AND", i + 1)) != -1;){
-                int element = nextElement(termIndex);
-                term[element] = inString.substring(j, inString.indexOf("AND") - 2);
+                andOrIndex[nextElement(andOrIndex)] = i;
+                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND") - 2);
                 j = i + 4;
             }
         }
@@ -196,22 +199,32 @@ public class SearchEngine {
         if (inString.contains("OR")){
             orTrue = true;
 
+            int j = 0;
             for (int i = -1; (i = inString.indexOf("OR", i + 1)) != -1;){
-
+                andOrIndex[nextElement(andOrIndex)] = i;
+                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("OR") - 2);
+                j = i + 4;
             }
         }
 
         if (andTrue && orTrue){
+            //if (inString.charAt(andOrIndex[i]) == 'A');
 
+            //else if (inString.charAt(andOrIndex[i]) == 'O');
+
+        }
+
+        if (!andTrue && !orTrue){
+            results = search(inString);
         }
 
         //check for only
         //parse through term1 term2
         //determine if there are ands and ors
-        //if and
-        //Node results = AndCompare(search(term1), search(term2));
-        //else or
-        //Node results = OrCompare(search(term1), search(term2));
+        if (andTrue && !orTrue)
+            results = andCompare(search(term[0]), search(term[1]));
+        else if (orTrue && !andTrue)
+            results = orCompare(search(term[0]), search(term[1]));
 
         return results;
 
@@ -220,15 +233,25 @@ public class SearchEngine {
     int nextElement(int[] arr){
         int var = -1;
 
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5;){
 
-            if (arr[i] != -1) i++;
-            else var = i;
+            if (arr[i] != -1) i+=1;
+            else {
+                var = i;
+                return var;
+            }
         }
         return var;
     }
 
-    String findTerm(String inString){
+    int[] initialized(int[] arr){
+        for (int i = 0; i < arr.length; i++){
+            arr[i] = -1;
+        }
+        return arr;
+    }
+
+    /*String findTerm(String inString){
         String term1, term2;
 
         //check if it contains and or or
@@ -252,20 +275,66 @@ public class SearchEngine {
 
         //return results;
 
+    }*/
+
+    Node andCompare(Node inNode1, Node inNode2) {
+        //if equal
+        if (inNode1.word.compareTo(inNode2.word) == 0) {
+            //if at the end of a list
+            if (inNode1.next == null)
+                return inNode1;
+            else if (inNode2.next == null)
+                return inNode2;
+            else {
+                Node result = new Node(inNode1.word);
+                result.next = andCompare(inNode1.next, inNode2.next);
+                return result;
+            }
+        }
+        //if n1 is greater
+        else if (inNode1.word.compareTo(inNode2.word) > 0) {
+            if (inNode2.next == null)
+                return null;
+            return andCompare(inNode1, inNode2.next);
+        }
+        //if n2 is greater
+        else {
+            if (inNode1.next == null)
+                return null;
+            return andCompare(inNode1.next, inNode2);
+        }
     }
 
-    //true = and, false = or
-    Node compare(Node inNode1, Node inNode2){
-        //temp node
-
-        //compare each doc in each list
-        //if anding
-        //store matches in temp
-        //if oring
-        //store all in temp discard duplicate docs
-        //return temp
-
-
+    Node orCompare(Node inNode1, Node inNode2) {
+        //if equal
+        if (inNode1.word.compareTo(inNode2.word) == 0) {
+            //if at the end of a list
+            if (inNode1.next == null)
+                return inNode2;
+            else if (inNode2.next == null)
+                return inNode1;
+            else {
+                Node result = new Node(inNode1.word);
+                result.next = orCompare(inNode1.next, inNode2.next);
+                return result;
+            }
+        }
+        //if n1 is greater
+        else if (inNode1.word.compareTo(inNode2.word) > 0) {
+            if (inNode2.next == null)
+                return inNode1;
+            Node result = new Node(inNode1.word);
+            result.next = orCompare(inNode1, inNode2.next);
+            return result;
+        }
+        //if n2 is greater
+        else {
+            if (inNode1.next == null)
+                return inNode2;
+            Node result = new Node(inNode1.word);
+            result.next = orCompare(inNode1.next, inNode2);
+            return result;
+        }
     }
 
     int mainHash(String wordIn) {
