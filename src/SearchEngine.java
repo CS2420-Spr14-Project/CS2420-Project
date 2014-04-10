@@ -193,17 +193,11 @@ public class SearchEngine {
 
                 andOrIndex[nextElement(andOrIndex)] = i;
 
-                System.out.println("test");
-
-                String temp =  inString.substring(j, inString.indexOf("AND", j) - 1);
-                System.out.println(temp);
-                term[nextElement(termIndex)] = temp;
+                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND", j) - 1);
 
                 termIndex[nextElement(termIndex)] = j;
 
                 j = i + 4;
-
-                //term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND") - 1);
 
                 if(inString.indexOf("AND", i + 1) == -1)
                     term[nextElement(termIndex)] = inString.substring(j, (inString.length()));
@@ -216,9 +210,18 @@ public class SearchEngine {
 
             int j = 0;
             for (int i = -1; (i = inString.indexOf("OR", i + 1)) != -1;){
+
                 andOrIndex[nextElement(andOrIndex)] = i;
-                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("OR") - 2);
-                j = i + 4;
+
+                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("OR", j) - 1);
+
+                termIndex[nextElement(termIndex)] = j;
+
+                j = i + 3;
+
+                if(inString.indexOf("OR", i + 1) == -1)
+                    term[nextElement(termIndex)] = inString.substring(j, (inString.length()));
+
             }
         }
 
@@ -245,9 +248,14 @@ public class SearchEngine {
                 results = andCompare(results, search(term[i+1]));
 
         }
-        else if (orTrue && !andTrue)
+        else if (orTrue && !andTrue){
             results = orCompare(search(term[0]), search(term[1]));
 
+            int numOr = nextElement(andOrIndex);
+
+            for(int i = 1; numOr > 1 && i < numOr; i++)
+                results = orCompare(results, search(term[i + 1]));
+        }
         return results;
 
     }
@@ -343,16 +351,22 @@ public class SearchEngine {
         }
         //if n1 is greater
         else if (inNode1.word.compareTo(inNode2.word) > 0) {
-            if (inNode2.next == null)
-                return inNode1;
-            Node result = new Node(inNode1.word);
+            if (inNode2.next == null){
+                Node result = new Node(inNode2.word);
+                result.next = inNode1;
+                return result;
+            }
+            Node result = new Node(inNode2.word);
             result.next = orCompare(inNode1, inNode2.next);
             return result;
         }
         //if n2 is greater
         else {
-            if (inNode1.next == null)
-                return inNode2;
+            if (inNode1.next == null){
+                Node result = new Node(inNode1.word);
+                result.next = inNode2;
+                return result;
+            }
             Node result = new Node(inNode1.word);
             result.next = orCompare(inNode1.next, inNode2);
             return result;
