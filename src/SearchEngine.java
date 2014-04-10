@@ -191,7 +191,7 @@ public class SearchEngine {
             int j = 0;
             for (int i = -1; (i = inString.indexOf("AND", i + 1)) != -1;){
                 andOrIndex[nextElement(andOrIndex)] = i;
-                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND") - 2);
+                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND") - 1);
                 j = i + 4;
             }
         }
