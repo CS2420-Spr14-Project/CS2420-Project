@@ -193,7 +193,11 @@ public class SearchEngine {
 
                 andOrIndex[nextElement(andOrIndex)] = i;
 
-                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND") - 1);
+                System.out.println("test");
+
+                String temp =  inString.substring(j, inString.indexOf("AND", j) - 1);
+                System.out.println(temp);
+                term[nextElement(termIndex)] = temp;
 
                 termIndex[nextElement(termIndex)] = j;
 
@@ -202,7 +206,7 @@ public class SearchEngine {
                 //term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND") - 1);
 
                 if(inString.indexOf("AND", i + 1) == -1)
-                    term[nextElement(termIndex)] = inString.substring(j, (inString.length()-1));
+                    term[nextElement(termIndex)] = inString.substring(j, (inString.length()));
 
             }
         }
@@ -232,8 +236,15 @@ public class SearchEngine {
         //check for only
         //parse through term1 term2
         //determine if there are ands and ors
-        if (andTrue && !orTrue)
+        if (andTrue && !orTrue){
             results = andCompare(search(term[0]), search(term[1]));
+
+            int numAnd = nextElement(andOrIndex);
+
+            for(int i = 1; numAnd > 1 && i < numAnd; i++)
+                results = andCompare(results, search(term[i+1]));
+
+        }
         else if (orTrue && !andTrue)
             results = orCompare(search(term[0]), search(term[1]));
 
