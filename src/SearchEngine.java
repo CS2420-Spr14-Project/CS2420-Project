@@ -10,13 +10,8 @@ import java.util.Scanner;
  */
 public class SearchEngine {
 
-    //final int SIZE = 5420;
-    //final int SIZE = 128;
     final int SIZE = 256;
-    //final int SIZE = 512;
-    //final int stopWordsSize = 54;
     final int stopWordsSize = 28;
-    //String [] words = new String[SIZE];
     Node[] words = new Node[SIZE];
     Node[] stopWords = new Node[stopWordsSize];
 
@@ -24,7 +19,6 @@ public class SearchEngine {
     public SearchEngine() throws FileNotFoundException {
         fileParser();
         getInput();
-
     }
 
     void fileParser() throws FileNotFoundException {
@@ -61,7 +55,6 @@ public class SearchEngine {
                     if (wordIn.endsWith(","))
                         wordIn = wordIn.replace(",", "");
                     //check to see if it is stop word
-
 
                     //if(!stopCheck(wordIn)){
                     if (!stopCheck(wordIn, stopWords[stopHash(wordIn) % stopWordsSize])) {
@@ -148,17 +141,14 @@ public class SearchEngine {
 
         String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
 
-        JOptionPane.showMessageDialog(null, unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
     }
 
     Node search(String input) {
 
-        //String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
         System.out.println(input);
         int value = mainHash(input);
         Node output = search(words[value % SIZE], input);
-
-        //JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + output, "Results", JOptionPane.PLAIN_MESSAGE);
 
         return output; // placed temporarily
     }
@@ -201,7 +191,6 @@ public class SearchEngine {
 
                 if(inString.indexOf("AND", i + 1) == -1)
                     term[nextElement(termIndex)] = inString.substring(j, (inString.length()));
-
             }
         }
 
@@ -221,7 +210,6 @@ public class SearchEngine {
 
                 if(inString.indexOf("OR", i + 1) == -1)
                     term[nextElement(termIndex)] = inString.substring(j, (inString.length()));
-
             }
         }
 
@@ -229,16 +217,12 @@ public class SearchEngine {
             //if (inString.charAt(andOrIndex[i]) == 'A');
 
             //else if (inString.charAt(andOrIndex[i]) == 'O');
-
         }
 
         if (!andTrue && !orTrue){
             results = search(inString);
         }
 
-        //check for only
-        //parse through term1 term2
-        //determine if there are ands and ors
         if (andTrue && !orTrue){
             results = andCompare(search(term[0]), search(term[1]));
 
@@ -257,7 +241,6 @@ public class SearchEngine {
                 results = orCompare(results, search(term[i + 1]));
         }
         return results;
-
     }
 
     int nextElement(int[] arr){
@@ -325,24 +308,20 @@ public class SearchEngine {
         }
         //if n1 is greater
         else if (inNode1.word.compareTo(inNode2.word) > 0) {
-            if (inNode2.next == null){
-                Node result = new Node(inNode2.word);
-                result.next = inNode1;
-                return result;
-            }
             Node result = new Node(inNode2.word);
-            result.next = orCompare(inNode1, inNode2.next);
+            if (inNode2.next == null)
+                result.next = inNode1;
+            else
+                result.next = orCompare(inNode1, inNode2.next);
             return result;
         }
         //if n2 is greater
         else {
-            if (inNode1.next == null){
-                Node result = new Node(inNode1.word);
-                result.next = inNode2;
-                return result;
-            }
             Node result = new Node(inNode1.word);
-            result.next = orCompare(inNode1.next, inNode2);
+            if (inNode1.next == null)
+                result.next = inNode2;
+            else
+                result.next = orCompare(inNode1.next, inNode2);
             return result;
         }
     }
@@ -370,4 +349,3 @@ public class SearchEngine {
         SearchEngine search = new SearchEngine();
     }
 }
-
