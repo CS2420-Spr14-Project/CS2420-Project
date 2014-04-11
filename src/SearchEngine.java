@@ -281,32 +281,6 @@ public class SearchEngine {
         return arr;
     }
 
-    /*String findTerm(String inString){
-        String term1, term2;
-
-        //check if it contains and or or
-        if (inString.contains("AND")){
-            term1 = inString.substring(0, inString.indexOf("AND"));
-            term2 = findTerm(inString.substring(inString.indexOf("AND") + 4, inString.length()));
-        }
-
-        if (inString.contains("OR")){
-            term1 = inString.substring(0, inString.indexOf("OR"));
-            term2 = findTerm(inString.substring(inString.indexOf("OR") + 3, inString.length()));
-        }
-
-        //check for only
-        //parse through term1 term2
-        //determine if there are ands and ors
-        //if and
-        //Node results = AndCompare(search(term1), search(term2));
-        //else or
-        //Node results = OrCompare(search(term1), search(term2));
-
-        //return results;
-
-    }*/
-
     Node andCompare(Node inNode1, Node inNode2) {
         //if equal
         if (inNode1.word.compareTo(inNode2.word) == 0) {
