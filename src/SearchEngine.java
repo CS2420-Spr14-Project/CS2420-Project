@@ -59,7 +59,7 @@ public class SearchEngine {
                     //if(!stopCheck(wordIn)){
                     if (!stopCheck(wordIn, stopWords[stopHash(wordIn) % stopWordsSize])) {
 
-                        if(wordIn.contains("-")){
+                        if (wordIn.contains("-")) {
                             //System.out.println(wordIn);
                         }
 
@@ -137,7 +137,7 @@ public class SearchEngine {
             return stopCheck(inString, inNode.next);
     }
 
-    void getInput(){
+    void getInput() {
 
         String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
 
@@ -164,7 +164,7 @@ public class SearchEngine {
             return search(inNode.next, input);
     }
 
-    Node unknown(String inString){
+    Node unknown(String inString) {
         boolean andTrue = false, orTrue = false;
         Node results = new Node();
         int[] termIndex = new int[4];
@@ -175,80 +175,88 @@ public class SearchEngine {
         andOrIndex = initialized(andOrIndex);
 
         //check if it contains and or or
-        if (inString.contains("AND")){
+        if (inString.contains("AND")) {
             andTrue = true;
 
             int j = 0;
-            for (int i = -1; (i = inString.indexOf("AND", i + 1)) != -1;){
+            for (int i = -1; (i = inString.indexOf("AND", i + 1)) != -1; ) {
 
-                andOrIndex[nextElement(andOrIndex)] = i;
+                if (!stopCheck(inString.substring(j, inString.indexOf("AND", j) - 1), stopWords[stopHash(inString.substring(j, inString.indexOf("AND", j) - 1)) % stopWordsSize])) {
 
-                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND", j) - 1);
+                    andOrIndex[nextElement(andOrIndex)] = i;
 
-                termIndex[nextElement(termIndex)] = j;
+                    term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("AND", j) - 1);
+
+                    termIndex[nextElement(termIndex)] = j;
+                }
 
                 j = i + 4;
 
-                if(inString.indexOf("AND", i + 1) == -1)
+                if (inString.indexOf("AND", i + 1) == -1)
                     term[nextElement(termIndex)] = inString.substring(j, (inString.length()));
             }
         }
 
-        if (inString.contains("OR")){
+        if (inString.contains("OR")) {
             orTrue = true;
 
             int j = 0;
-            for (int i = -1; (i = inString.indexOf("OR", i + 1)) != -1;){
+            for (int i = -1; (i = inString.indexOf("OR", i + 1)) != -1; ) {
 
-                andOrIndex[nextElement(andOrIndex)] = i;
+                if (!stopCheck(inString.substring(j, inString.indexOf("OR", j) - 1), stopWords[stopHash(inString.substring(j, inString.indexOf("OR", j) - 1)) % stopWordsSize])) {
 
-                term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("OR", j) - 1);
+                    andOrIndex[nextElement(andOrIndex)] = i;
 
-                termIndex[nextElement(termIndex)] = j;
+                    term[nextElement(termIndex)] = inString.substring(j, inString.indexOf("OR", j) - 1);
+
+                    termIndex[nextElement(termIndex)] = j;
+
+                }
 
                 j = i + 3;
 
-                if(inString.indexOf("OR", i + 1) == -1)
+                if (inString.indexOf("OR", i + 1) == -1)
                     term[nextElement(termIndex)] = inString.substring(j, (inString.length()));
             }
         }
 
-        if (andTrue && orTrue){
+        if (andTrue && orTrue) {
             //if (inString.charAt(andOrIndex[i]) == 'A');
 
             //else if (inString.charAt(andOrIndex[i]) == 'O');
         }
 
-        if (!andTrue && !orTrue){
+        if (!andTrue && !orTrue) {
             results = search(inString);
-        }
+        } else if (nextElement(andOrIndex) > 0) {
+            if (andTrue && !orTrue) {
+                results = andCompare(search(term[0]), search(term[1]));
 
-        if (andTrue && !orTrue){
-            results = andCompare(search(term[0]), search(term[1]));
+                int numAnd = nextElement(andOrIndex);
 
-            int numAnd = nextElement(andOrIndex);
+                for (int i = 1; numAnd > 1 && i < numAnd; i++)
+                    results = andCompare(results, search(term[i + 1]));
 
-            for(int i = 1; numAnd > 1 && i < numAnd; i++)
-                results = andCompare(results, search(term[i+1]));
+            } else if (orTrue && !andTrue) {
+                results = orCompare(search(term[0]), search(term[1]));
 
-        }
-        else if (orTrue && !andTrue){
-            results = orCompare(search(term[0]), search(term[1]));
+                int numOr = nextElement(andOrIndex);
 
-            int numOr = nextElement(andOrIndex);
+                for (int i = 1; numOr > 1 && i < numOr; i++)
+                    results = orCompare(results, search(term[i + 1]));
+            }
+        } else
+            results = search(term[0]);
 
-            for(int i = 1; numOr > 1 && i < numOr; i++)
-                results = orCompare(results, search(term[i + 1]));
-        }
         return results;
     }
 
-    int nextElement(int[] arr){
+    int nextElement(int[] arr) {
         int var = -1;
 
-        for (int i = 0; i < 5;){
+        for (int i = 0; i < 5; ) {
 
-            if (arr[i] != -1) i+=1;
+            if (arr[i] != -1) i += 1;
             else {
                 var = i;
                 return var;
@@ -257,8 +265,8 @@ public class SearchEngine {
         return var;
     }
 
-    int[] initialized(int[] arr){
-        for (int i = 0; i < arr.length; i++){
+    int[] initialized(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = -1;
         }
         return arr;
