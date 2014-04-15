@@ -174,9 +174,13 @@ public class SearchEngine {
         termIndex = initialized(termIndex);
         andOrIndex = initialized(andOrIndex);
 
+
+
+        if (inString.contains("AND")) andTrue = true;
+        if (inString.contains("OR")) orTrue = true;
+
         //check if it contains and or or
-        if (inString.contains("AND")) {
-            andTrue = true;
+        if (andTrue) {
 
             int j = 0;
             for (int i = -1; (i = inString.indexOf("AND", i + 1)) != -1; ) {
@@ -197,8 +201,7 @@ public class SearchEngine {
             }
         }
 
-        if (inString.contains("OR")) {
-            orTrue = true;
+        if (orTrue) {
 
             int j = 0;
             for (int i = -1; (i = inString.indexOf("OR", i + 1)) != -1; ) {
@@ -221,9 +224,21 @@ public class SearchEngine {
         }
 
         if (andTrue && orTrue) {
-            //if (inString.charAt(andOrIndex[i]) == 'A');
+            int[] andOrList = new int[4];
+            andOrList = initialized(andOrList);
 
-            //else if (inString.charAt(andOrIndex[i]) == 'O');
+            for (int i = 0; i < 3; i++){
+
+                if (inString.charAt(andOrIndex[i]) == 'A') andOrList[i] = 1;
+                else if (inString.charAt(andOrIndex[i]) == 'O') andOrList[i] = 0;
+
+            }
+
+            if (andOrList[0] > andOrList[2] && andOrList[1] > andOrList[2]){
+                Node temp1 = unknown(term[2]);
+                Node temp2 = unknown(term[3]);
+                results = orCompare(temp1, temp2);
+            }
         }
 
         if (!andTrue && !orTrue) {
