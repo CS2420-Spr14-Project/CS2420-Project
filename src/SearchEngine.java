@@ -27,22 +27,24 @@ public class SearchEngine extends JFrame implements ActionListener{
     public SearchEngine() throws FileNotFoundException {
         fileParser();
 
-        JLabel title = new JLabel("DocHunt", SwingConstants.CENTER);
+        ImageIcon logo = new ImageIcon("Project/docLogo.png");
+
+        JLabel title = new JLabel(logo);
         inputTF = new JTextField();
 
         Container pane = getContentPane();
         pane.setLayout(null);
 
-        title.setSize(500, 100);
-        title.setLocation(0, 0);
-        title.setFont(new Font(title.getName(), Font.PLAIN, 50));
+        title.setSize(450, 100);
+        title.setLocation(20, 0);
+        //title.setFont(new Font(title.getName(), Font.PLAIN, 50));
 
         inputTF.setSize(300, 30);
-        inputTF.setLocation(50, 100);
+        inputTF.setLocation(60, 100);
 
         search = new JButton("Search");
         search.setSize(80, 29);
-        search.setLocation(350, 100);
+        search.setLocation(360, 100);
         searchHandler = new SearchBH();
         search.addActionListener(searchHandler);
 
@@ -56,8 +58,8 @@ public class SearchEngine extends JFrame implements ActionListener{
         //resultsTA.setText("World");
 
         JScrollPane temp = new JScrollPane(resultsTA);
-        temp.setBounds(50, 150, 445, 322);
-        temp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        temp.setBounds(60, 150, 435, 322);
+        //temp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         temp.setPreferredSize(new Dimension(100, 100));
         temp.setBorder(null);
 
@@ -449,7 +451,7 @@ public class SearchEngine extends JFrame implements ActionListener{
 
         public void actionPerformed(ActionEvent e){
 
-            resultsTA.setText(unknown(inputTF.getText()).printDocs());
+            resultsTA.setText(unknown(inputTF.getText()).printDocs()+"\n");
         }
 
     }
