@@ -1,6 +1,7 @@
 import javafx.scene.paint.Stop;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -8,17 +9,62 @@ import java.util.Scanner;
 /**
  * Created on 3/26/14.
  */
-public class SearchEngine {
+public class SearchEngine extends JFrame{
 
     final int SIZE = 256;
     final int stopWordsSize = 28;
     Node[] words = new Node[SIZE];
     Node[] stopWords = new Node[stopWordsSize];
+    JTextField inputTF;
+    private JTextArea resultsTA = new JTextArea("hello");
+    JButton search;
 
     //constructor
     public SearchEngine() throws FileNotFoundException {
         fileParser();
+
+        JLabel title = new JLabel("DocHunt", SwingConstants.CENTER);
+        inputTF = new JTextField();
+
+        Container pane = getContentPane();
+        pane.setLayout(null);
+
+        title.setSize(500, 100);
+        title.setLocation(100, 0);
+        title.setFont(new Font(title.getName(), Font.PLAIN, 50));
+
+        inputTF.setSize(300, 30);
+        inputTF.setLocation(150, 100);
+
+        search = new JButton("Search");
+        search.setSize(80, 29);
+        search.setLocation(450, 100);
+
+        //resultsTA.setSize(100, 100);
+        //resultsTA.setLocation(50, 150);
+        resultsTA.setBounds(60, 160, 100, 100);
+
+        //resultsTA.setText("World");
+
+        JScrollPane temp = new JScrollPane(resultsTA);
+        temp.setBounds(50, 150, 200, 200);
+        //temp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        temp.setPreferredSize(new Dimension(100, 100));
+
+        pane.add(title);
+        pane.add(inputTF);
+        pane.add(search);
+        //pane.add(resultsTA);
+        pane.add(temp);
+        resultsTA.setLineWrap(true);
+
+
         getInput();
+
+        setSize(700, 700);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     void fileParser() throws FileNotFoundException {
@@ -141,7 +187,16 @@ public class SearchEngine {
 
         String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
 
-        JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
+        //JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
+
+        resultsTA.setText(unknown(input).printDocs());
+
+
+
+
+
+
+
     }
 
     Node search(String input) {
