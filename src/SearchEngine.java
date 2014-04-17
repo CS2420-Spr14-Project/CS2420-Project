@@ -2,6 +2,8 @@ import javafx.scene.paint.Stop;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
@@ -9,15 +11,17 @@ import java.util.Scanner;
 /**
  * Created on 3/26/14.
  */
-public class SearchEngine extends JFrame{
+public class SearchEngine extends JFrame implements ActionListener{
 
     final int SIZE = 256;
     final int stopWordsSize = 28;
     Node[] words = new Node[SIZE];
     Node[] stopWords = new Node[stopWordsSize];
     JTextField inputTF;
-    private JTextArea resultsTA = new JTextArea("hello");
+    private JTextArea resultsTA = new JTextArea("");
     JButton search;
+    String searchTerm;
+    SearchBH searchHandler;
 
     //constructor
     public SearchEngine() throws FileNotFoundException {
@@ -30,26 +34,32 @@ public class SearchEngine extends JFrame{
         pane.setLayout(null);
 
         title.setSize(500, 100);
-        title.setLocation(100, 0);
+        title.setLocation(0, 0);
         title.setFont(new Font(title.getName(), Font.PLAIN, 50));
 
         inputTF.setSize(300, 30);
-        inputTF.setLocation(150, 100);
+        inputTF.setLocation(50, 100);
 
         search = new JButton("Search");
         search.setSize(80, 29);
-        search.setLocation(450, 100);
+        search.setLocation(350, 100);
+        searchHandler = new SearchBH();
+        search.addActionListener(searchHandler);
 
         //resultsTA.setSize(100, 100);
         //resultsTA.setLocation(50, 150);
         resultsTA.setBounds(60, 160, 100, 100);
+        resultsTA.setEditable(false);
+        resultsTA.setBorder(null);
+        resultsTA.setBackground(null);
 
         //resultsTA.setText("World");
 
         JScrollPane temp = new JScrollPane(resultsTA);
-        temp.setBounds(50, 150, 200, 200);
-        //temp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        temp.setBounds(50, 150, 445, 322);
+        temp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         temp.setPreferredSize(new Dimension(100, 100));
+        temp.setBorder(null);
 
         pane.add(title);
         pane.add(inputTF);
@@ -59,10 +69,11 @@ public class SearchEngine extends JFrame{
         resultsTA.setLineWrap(true);
 
 
-        getInput();
+        //getInput();
 
-        setSize(700, 700);
+        setSize(500, 500);
         setVisible(true);
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
@@ -185,17 +196,11 @@ public class SearchEngine extends JFrame{
 
     void getInput() {
 
-        String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
+        //String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
 
         //JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
 
-        resultsTA.setText(unknown(input).printDocs());
-
-
-
-
-
-
+        //resultsTA.setText(unknown(input).printDocs());
 
     }
 
@@ -209,12 +214,20 @@ public class SearchEngine extends JFrame{
     }
 
     Node search(Node inNode, String input) {
-        if (inNode.word == null)
-            return null; //"Word not found."
+        if (inNode.word == null){
+            if (stopCheck(input, stopWords[stopHash(input) % stopWordsSize])){
+                return new Node("Please refine your search");
+            }
+            else return new Node(input + " is not found in any document");
+        }
+
         else if (inNode.word.compareTo(input) == 0) {
             return inNode.docs;
         } else if (inNode.next == null) {
-            return null; // "Word not found."
+            if (stopCheck(input, stopWords[stopHash(input) % stopWordsSize])){
+                return new Node("Please refine your search");
+            }
+            else return new Node(input + " is not found in any document");
         } else
             return search(inNode.next, input);
     }
@@ -425,5 +438,19 @@ public class SearchEngine extends JFrame{
     public static void main(String[] args) throws FileNotFoundException {
 
         SearchEngine search = new SearchEngine();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    private class SearchBH implements ActionListener{
+
+        public void actionPerformed(ActionEvent e){
+
+            resultsTA.setText(unknown(inputTF.getText()).printDocs());
+        }
+
     }
 }
