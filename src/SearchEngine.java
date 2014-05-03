@@ -1,5 +1,3 @@
-import javafx.scene.paint.Stop;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +18,6 @@ public class SearchEngine extends JFrame implements ActionListener{
     JTextField inputTF;
     private JTextArea resultsTA = new JTextArea("");
     JButton search;
-    String searchTerm;
     SearchBH searchHandler;
 
     //constructor
@@ -37,7 +34,6 @@ public class SearchEngine extends JFrame implements ActionListener{
 
         title.setSize(450, 100);
         title.setLocation(20, 0);
-        //title.setFont(new Font(title.getName(), Font.PLAIN, 50));
 
         inputTF.setSize(300, 30);
         inputTF.setLocation(60, 100);
@@ -48,30 +44,21 @@ public class SearchEngine extends JFrame implements ActionListener{
         searchHandler = new SearchBH();
         search.addActionListener(searchHandler);
 
-        //resultsTA.setSize(100, 100);
-        //resultsTA.setLocation(50, 150);
         resultsTA.setBounds(60, 160, 100, 100);
         resultsTA.setEditable(false);
         resultsTA.setBorder(null);
         resultsTA.setBackground(null);
 
-        //resultsTA.setText("World");
-
         JScrollPane temp = new JScrollPane(resultsTA);
         temp.setBounds(60, 150, 435, 322);
-        //temp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         temp.setPreferredSize(new Dimension(100, 100));
         temp.setBorder(null);
 
         pane.add(title);
         pane.add(inputTF);
         pane.add(search);
-        //pane.add(resultsTA);
         pane.add(temp);
         resultsTA.setLineWrap(true);
-
-
-        //getInput();
 
         setSize(500, 500);
         setVisible(true);
@@ -82,7 +69,6 @@ public class SearchEngine extends JFrame implements ActionListener{
 
     void fileParser() throws FileNotFoundException {
         String fileName, fileNum, filePath;
-        int count = 0;
 
         stopWord();
 
@@ -177,17 +163,6 @@ public class SearchEngine extends JFrame implements ActionListener{
                 }
             }
         }
-
-        //prints out the array of stored words
-        System.out.println("Array of stored words:");
-        for (int i = 0; i < SIZE; i++) {
-            System.out.println(i + " " + words[i].word);
-        }
-        //prints out the array of stored words
-        System.out.println("Array of stop words(withought linked lists):");
-        for (int j = 0; j < stopWordsSize; j++) {
-            System.out.println(stopWords[j].word);
-        }
     }
 
     //creates the stopWords hash table
@@ -229,23 +204,10 @@ public class SearchEngine extends JFrame implements ActionListener{
             return stopCheck(inString, inNode.next);
     }
 
-    void getInput() {
-
-        //String input = JOptionPane.showInputDialog(null, "What would you like to search for?", "Search");
-
-        //JOptionPane.showMessageDialog(null, input + " was found in the following documents:\n" + unknown(input).printDocs(), "Results", JOptionPane.PLAIN_MESSAGE);
-
-        //resultsTA.setText(unknown(input).printDocs());
-
-    }
-
     Node search(String input) {
 
-        System.out.println(input);
         int value = mainHash(input);
-        Node output = search(words[value % SIZE], input);
-
-        return output; // placed temporarily
+        return search(words[value % SIZE], input);
     }
 
     Node search(Node inNode, String input) {
@@ -458,15 +420,10 @@ public class SearchEngine extends JFrame implements ActionListener{
         for (int j = 0; j < wordIn.length(); j++) {
             value += wordIn.charAt(j);
         }
-        //value = wordIn.charAt(0)*wordIn.charAt(wordIn.length()-1);
         return value;
     }
 
     int stopHash(String wordIn) {
-        /*int value = 0;
-            for(int i =0; i < wordIn.length(); i++){
-                value += wordIn.charAt(i);
-            }*/
         return wordIn.charAt(0) + wordIn.charAt(wordIn.length() - 1);
     }
 
