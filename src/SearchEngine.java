@@ -101,24 +101,18 @@ public class SearchEngine extends JFrame implements ActionListener{
                         wordIn = wordIn.replace(",", "");
                     //check to see if it is stop word
 
-                    //if(!stopCheck(wordIn)){
                     if (!stopCheck(wordIn, stopWords[stopHash(wordIn) % stopWordsSize])) {
 
                         if (wordIn.contains("-")) {
-                            //System.out.println("*** HYPHENATED WORD " + wordIn);
                             String wordPt2 = wordIn;
 
                             while (wordPt2.contains("-")){
-                                //System.out.println("  wordIn " + wordIn);
                                 wordIn = wordPt2.substring(0, (wordPt2.indexOf('-')));
-                                //System.out.println("* wordIn " + wordIn);
 
                                 wordPt2 = wordPt2.substring(wordPt2.indexOf('-') + 1, wordPt2.length());
-                                //System.out.println("* wordPt2 " + wordPt2);
 
                                 //insert into hash table
                                 Node toInsert = new Node(wordIn, fileName);
-                                //System.out.println(wordIn + ", " + fileName);
                                 int value = mainHash(wordIn);
 
                                 if (words[value % SIZE].word == null) {
@@ -142,7 +136,6 @@ public class SearchEngine extends JFrame implements ActionListener{
                         if (!wordIn.contains("-")){
                             //insert into hash table
                             Node toInsert = new Node(wordIn, fileName);
-                            //System.out.println(wordIn + ", " + fileName);
                             int value = mainHash(wordIn);
 
                             if (words[value % SIZE].word == null) {
@@ -240,7 +233,6 @@ public class SearchEngine extends JFrame implements ActionListener{
         andOrIndex = initialized(andOrIndex);
 
         inString = inString.replace("-", " AND ");
-        //System.out.println("*** inString is " + inString);
 
         if (inString.contains("AND")) andTrue = true;
         if (inString.contains("OR")) orTrue = true;
