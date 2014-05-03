@@ -119,27 +119,61 @@ public class SearchEngine extends JFrame implements ActionListener{
                     if (!stopCheck(wordIn, stopWords[stopHash(wordIn) % stopWordsSize])) {
 
                         if (wordIn.contains("-")) {
-                            //System.out.println(wordIn);
+                            System.out.println("*** HYPHENATED WORD " + wordIn);
+                                                                                                // ******* working here
+                            String wordPt2 = wordIn;
+
+                            while (wordPt2.contains("-")){
+                                System.out.println("  wordIn " + wordIn);
+                                wordIn = wordPt2.substring(0, (wordPt2.indexOf('-')));
+                                System.out.println("* wordIn " + wordIn);
+
+                                wordPt2 = wordPt2.substring(wordPt2.indexOf('-') + 1, wordPt2.length());
+                                System.out.println("* wordPt2 " + wordPt2);
+
+                                //insert into hash table
+                                Node toInsert = new Node(wordIn, fileName);
+                                //System.out.println(wordIn + ", " + fileName);
+                                int value = mainHash(wordIn);
+
+                                if (words[value % SIZE].word == null) {
+                                    words[value % SIZE].word = toInsert.word;
+                                    words[value % SIZE].docs = toInsert.docs;
+                                } else if (words[value % SIZE].word.compareTo(toInsert.word) == 0) {
+                                    Node docIn = new Node(toInsert.docs.word);
+                                    if (words[value % SIZE].docs == null)
+                                        words[value % SIZE].docs = toInsert;
+                                    else
+                                        words[value % SIZE].docs.insert(docIn);
+                                } else if (words[value % SIZE].next == null)
+                                    words[value % SIZE].next = toInsert;
+                                else
+                                    words[value % SIZE].next.insert(toInsert);
+
+                                wordIn = wordPt2;
+                            }
                         }
 
-                        //insert into hash table
-                        Node toInsert = new Node(wordIn, fileName);
-                        //System.out.println(wordIn + ", " + fileName);
-                        int value = mainHash(wordIn);
+                        if (!wordIn.contains("-")){
+                            //insert into hash table
+                            Node toInsert = new Node(wordIn, fileName);
+                            //System.out.println(wordIn + ", " + fileName);
+                            int value = mainHash(wordIn);
 
-                        if (words[value % SIZE].word == null) {
-                            words[value % SIZE].word = toInsert.word;
-                            words[value % SIZE].docs = toInsert.docs;
-                        } else if (words[value % SIZE].word.compareTo(toInsert.word) == 0) {
-                            Node docIn = new Node(toInsert.docs.word);
-                            if (words[value % SIZE].docs == null)
-                                words[value % SIZE].docs = toInsert;
+                            if (words[value % SIZE].word == null) {
+                                words[value % SIZE].word = toInsert.word;
+                                words[value % SIZE].docs = toInsert.docs;
+                            } else if (words[value % SIZE].word.compareTo(toInsert.word) == 0) {
+                                Node docIn = new Node(toInsert.docs.word);
+                                if (words[value % SIZE].docs == null)
+                                    words[value % SIZE].docs = toInsert;
+                                else
+                                    words[value % SIZE].docs.insert(docIn);
+                            } else if (words[value % SIZE].next == null)
+                                words[value % SIZE].next = toInsert;
                             else
-                                words[value % SIZE].docs.insert(docIn);
-                        } else if (words[value % SIZE].next == null)
-                            words[value % SIZE].next = toInsert;
-                        else
-                            words[value % SIZE].next.insert(toInsert);
+                                words[value % SIZE].next.insert(toInsert);
+                        }
                     }
                 }
             }
@@ -244,7 +278,8 @@ public class SearchEngine extends JFrame implements ActionListener{
         termIndex = initialized(termIndex);
         andOrIndex = initialized(andOrIndex);
 
-
+        inString = inString.replace("-", " AND ");
+        System.out.println("*** inString is " + inString);
 
         if (inString.contains("AND")) andTrue = true;
         if (inString.contains("OR")) orTrue = true;
